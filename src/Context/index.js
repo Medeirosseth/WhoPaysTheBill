@@ -4,10 +4,16 @@ import "react-toastify/dist/ReactToastify.css";
 
 const MyContext = React.createContext();
 
+const DEFAULT_STATE = {
+  stage: 1,
+  players: [],
+  result: "",
+};
 class MyProvider extends Component {
   state = {
     stage: 1,
     players: [],
+    result: "",
   };
 
   addPlayerHandler = (name) => {
@@ -31,7 +37,28 @@ class MyProvider extends Component {
         autoClose: 20000,
       });
     } else {
+      this.setState(
+        {
+          stage: 2,
+        },
+        () => {
+          setTimeout(() => {
+            this.generateLoser();
+          }, 3000);
+        }
+      );
     }
+  };
+
+  generateLoser = () => {
+    const { players } = this.state;
+    this.setState({
+      result: players[Math.floor(Math.random() * players.length)],
+    });
+  };
+
+  resetGame = () => {
+    this.setState(DEFAULT_STATE);
   };
   render() {
     return (
@@ -42,6 +69,8 @@ class MyProvider extends Component {
             addPlayer: this.addPlayerHandler,
             removePlayer: this.removePlayerHandler,
             next: this.nextHandler,
+            getNewLoser: this.generateLoser,
+            resetGame: this.resetGame,
           }}
         >
           {this.props.children}

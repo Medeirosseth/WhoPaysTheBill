@@ -68,3 +68,7 @@ button.miami {
   font-size: 40px;
   color: #585858;
 }
+
+.badge {
+  color: red;
+}
